@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Long Vu — Finance & Data Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F3ED;
+    --panel:#ECE7D9;
+    --panel-line:#DAD3BF;
+    --ink:#000000;
+    --ink-soft:#000000;
+    --gold:#A9812F;
+    --gold-deep:#8A6A24;
+    --gain:#1E7A4C;
+    --loss:#A8412C;
+    --line:#D8D2C0;
+    --radius:2px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:#000000;
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--gold); color:var(--paper); }
+  a{ color:inherit; }
+  :focus-visible{ outline:2px solid var(--gold-deep); outline-offset:3px; }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 32px; }
+  @media (max-width:640px){ .wrap{ padding:0 20px; } }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#000000;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0;
+    color:#000000;
+  }
+
+  /* ---------- Nav ---------- */
+  header.site-nav{
+    background:var(--paper);
+    position:sticky; top:0; z-index:20;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:flex-end;
+    padding:16px 0;
+  }
+  nav.links{ display:flex; gap:26px; }
+  nav.links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:#000000;
+    transition:opacity .15s ease;
+  }
+  nav.links a:hover{ opacity:.6; text-decoration:underline; }
+  @media (max-width:640px){
+    nav.links{ gap:14px; flex-wrap:wrap; justify-content:flex-end; }
+    nav.links a{ font-size:10.5px; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding:64px 0 48px; border-bottom:1px solid var(--line); }
+  .hero-top{ display:flex; align-items:center; gap:20px; }
+  .avatar{
+    flex-shrink:0;
+    width:84px; height:84px;
+    border-radius:50%;
+    border:1.5px solid var(--gold-deep);
+    background:var(--panel);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:28px;
+    color:#000000;
+  }
+  .hero h1{
+    font-size:clamp(36px, 6vw, 60px);
+    line-height:1.04;
+    margin-top:16px;
+  }
+  .hero h1 em{ font-style:italic; }
+  .hero p.bio{
+    max-width:600px;
+    margin-top:20px;
+    font-size:17px;
+  }
+  .quote-line{
+    margin-top:18px;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:17px;
+    border-left:2px solid var(--gold-deep);
+    padding-left:14px;
+  }
+  .cta-row{ display:flex; gap:14px; margin-top:30px; flex-wrap:wrap; }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:12px 20px;
+    border-radius:var(--radius);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{ background:#000000; color:var(--paper); }
+  .btn-primary:hover{ background:var(--gold-deep); transform:translateY(-1px); }
+  .btn-ghost{ border:1px solid #000000; color:#000000; }
+  .btn-ghost:hover{ background:#000000; color:var(--paper); }
+
+  .stat-badges{
+    margin-top:36px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (max-width:640px){ .stat-badges{ grid-template-columns:repeat(2,1fr); } }
+  .stat-badge{ background:var(--paper); padding:16px 14px; }
+  .stat-badge .num{ font-family:'Fraunces', serif; font-weight:600; font-size:24px; }
+  .stat-badge .label{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; margin-top:4px; }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:60px 0; border-bottom:1px solid var(--line); }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:8px; }
+  .section-head h2{ font-size:27px; }
+  .section-head .idx{ font-family:'IBM Plex Mono', monospace; font-size:12px; }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:40px; }
+  @media (max-width:760px){ .about-grid{ grid-template-columns:1fr; } }
+  .about-grid p{ font-size:15.5px; margin:0 0 16px; }
+  .interest-chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  .interest-chip{ font-family:'IBM Plex Mono', monospace; font-size:12px; padding:6px 10px; background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius); }
+  .about-side h4{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:10px; }
+
+  /* ---------- Skills ---------- */
+  .skills-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  @media (max-width:760px){ .skills-grid{ grid-template-columns:1fr; } }
+  .skill-group h4{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:12px; }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ font-family:'IBM Plex Mono', monospace; font-size:12px; padding:6px 10px; background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius); }
+
+  /* ---------- Education / Certs ---------- */
+  .edu-row{ display:grid; grid-template-columns:1.1fr 1fr; gap:32px; }
+  @media (max-width:760px){ .edu-row{ grid-template-columns:1fr; } }
+  .cert-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .cert-list li{ font-size:14.5px; padding-left:16px; position:relative; }
+  .cert-list li::before{ content:"—"; position:absolute; left:0; color:var(--gold-deep); }
+  .award{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--gain); }
+
+  /* ---------- Timeline (Experience / Leadership) ---------- */
+  .timeline{ display:flex; flex-direction:column; gap:0; }
+  .tl-item{ display:grid; grid-template-columns:170px 1fr; gap:24px; padding:22px 0; border-top:1px solid var(--line); }
+  .tl-item:first-child{ border-top:none; }
+  @media (max-width:640px){ .tl-item{ grid-template-columns:1fr; gap:8px; } }
+  .tl-meta{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; }
+  .tl-meta .dates{ font-weight:600; }
+  .tl-meta .loc{ margin-top:4px; }
+  .tl-tag{ display:inline-block; margin-top:8px; font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; padding:3px 7px; background:var(--panel); border:1px solid var(--panel-line); }
+  .tl-body h3{ font-size:19px; }
+  .tl-role{ font-style:italic; font-size:14px; margin:4px 0 10px; }
+  .tl-body ul{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:14.5px; }
+
+  /* ---------- Projects grid (mini cards) ---------- */
+  .proj-mini-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+  @media (max-width:760px){ .proj-mini-grid{ grid-template-columns:1fr; } }
+  .proj-mini-card{
+    display:block;
+    text-decoration:none;
+    border:1px solid var(--line);
+    padding:22px;
+    border-radius:var(--radius);
+    background:var(--paper);
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .proj-mini-card:hover{ border-color:var(--gold-deep); transform:translateY(-2px); }
+  .proj-mini-tags{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--gold-deep); }
+  .proj-mini-card h3{ font-size:19px; margin-top:8px; }
+  .proj-mini-desc{ font-size:14px; margin-top:8px; }
+  .proj-mini-chip-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .proj-mini-chip{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; padding:4px 8px; background:var(--panel); border:1px solid var(--panel-line); }
+  .proj-mini-arrow{ margin-top:14px; font-family:'IBM Plex Mono', monospace; font-size:12px; }
+
+  /* ---------- Project detail sections ---------- */
+  .detail-section{ padding:56px 0; border-bottom:1px solid var(--line); }
+  .back-link{ font-family:'IBM Plex Mono', monospace; font-size:12px; text-decoration:none; border-bottom:1px solid var(--gold-deep); padding-bottom:1px; }
+  .detail-kicker{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--gold-deep); margin-top:22px; }
+  .detail-section h2{ font-size:30px; margin-top:8px; max-width:720px; }
+  .detail-lede{ max-width:680px; margin-top:16px; font-size:15.5px; }
+  .detail-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:28px; }
+  @media (max-width:700px){ .detail-stats{ grid-template-columns:repeat(2,1fr); } }
+  .detail-stat{ background:var(--paper); padding:14px; }
+  .detail-stat .k{ font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--gold-deep); }
+  .detail-stat .v{ font-size:13.5px; margin-top:4px; }
+  .detail-cols{ display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:32px; }
+  @media (max-width:700px){ .detail-cols{ grid-template-columns:1fr; } }
+  .detail-cols h4{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:10px; }
+  .detail-cols ul{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:8px; font-size:14.5px; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:52px 0 64px; }
+  .footer-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; align-items:flex-start; }
+  .foot-links{ display:flex; gap:22px; flex-wrap:wrap; }
+  .foot-links a{ text-decoration:none; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:#000000; border-bottom:1px solid var(--gold-deep); }
+  .foot-note{ font-family:'IBM Plex Mono', monospace; font-size:11px; margin-top:28px; }
+</style>
+</head>
+<body>
+
+  <header class="site-nav">
+    <div class="wrap nav-row">
+      <nav class="links">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#leadership">Leadership</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap" style="border-top:none;">
+      <div class="hero-top">
+        <div class="avatar" aria-hidden="true">LV</div>
+        <div>
+          <p class="eyebrow">Finance &amp; Data Analytics</p>
+        </div>
+      </div>
+      <h1>Long <em>Vu</em></h1>
+      <p class="bio">Incoming freshman at NYU, Class of 2030, with a growing conviction that markets and data tell the same story from two angles. Most of my time goes to spreadsheets, stock charts, and the occasional chi-square test — I'm building toward a career at the intersection of finance and analytics, based in Ho Chi Minh City, Vietnam.</p>
+      <p class="quote-line">"The market rewards patience more than prediction."</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#projects">View Projects →</a>
+        <a class="btn btn-ghost" href="#experience">My Experience</a>
+        <a class="btn btn-ghost" href="Long_Vu_Resume.pdf" download>↓ Resume</a>
+      </div>
+      <div class="stat-badges">
+        <div class="stat-badge"><div class="num">4.2</div><div class="label">GPA · Weighted</div></div>
+        <div class="stat-badge"><div class="num">5</div><div class="label">Certificates</div></div>
+        <div class="stat-badge"><div class="num">2</div><div class="label">Analytics Projects</div></div>
+        <div class="stat-badge"><div class="num">2030</div><div class="label">NYU Class Of</div></div>
+      </div>
+    </section>
+
+    <section id="about" class="wrap">
+      <div class="section-head">
+        <h2>About Me</h2>
+        <span class="idx mono">01 / ABOUT</span>
+      </div>
+      <div class="about-grid">
+        <div>
+          <p>I'm an incoming freshman at NYU, coming from Millbrook School with a 4.2 weighted GPA. I've always been drawn to the idea that numbers — in a spreadsheet, on a stock chart, in a survey — are just another way of telling a story about people and decisions.</p>
+          <p>Between coursework and independent projects, I've picked up Excel, Power BI, and SQL, and I've started applying AI tools like ChatGPT and Claude to speed up data cleaning and analysis. I'm currently interning as a Stock Broker Intern at MBS Securities in Ho Chi Minh City, getting a first look at how markets actually run day to day.</p>
+        </div>
+        <div class="about-side">
+          <h4>What I'm into</h4>
+          <div class="interest-chip-row">
+            <span class="interest-chip">Finance</span>
+            <span class="interest-chip">Data Analytics</span>
+            <span class="interest-chip">Stock Markets</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="wrap">
+      <div class="section-head">
+        <h2>Skills</h2>
+        <span class="idx mono">02 / STACK</span>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Data &amp; Analytics</h4>
+          <div class="chip-row">
+            <span class="chip">Data Science</span>
+            <span class="chip">Exploratory Data Analysis</span>
+            <span class="chip">SQL</span>
+            <span class="chip">Power BI</span>
+            <span class="chip">Applied Machine Learning</span>
+            <span class="chip">Data Ethics</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>AI Tools</h4>
+          <div class="chip-row">
+            <span class="chip">ChatGPT</span>
+            <span class="chip">Claude</span>
+            <span class="chip">Microsoft Copilot</span>
+            <span class="chip">Prompt Engineering</span>
+            <span class="chip">Generative AI</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Office &amp; Productivity</h4>
+          <div class="chip-row">
+            <span class="chip">Excel</span>
+            <span class="chip">Word</span>
+            <span class="chip">PowerPoint</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="wrap">
+      <div class="section-head">
+        <h2>Education &amp; Certificates</h2>
+        <span class="idx mono">03 / CREDENTIALS</span>
+      </div>
+      <div class="edu-row">
+        <div>
+          <h3 style="font-size:20px;">Millbrook School</h3>
+          <p class="proj-mini-desc">Millbrook, NY · Graduated May 2026</p>
+          <p class="proj-mini-desc">High School Diploma — 4.2 weighted GPA</p>
+          <div style="margin-top:18px; display:flex; flex-direction:column; gap:8px;">
+            <span class="award">🏅 IYSA International Youth Business Competition 2025 — Gold Medal (100+ teams)</span>
+            <span class="award">🏅 Vietnam Youth Start-up Challenge 2024 — 4th Place Nationally (50 teams)</span>
+          </div>
+        </div>
+        <div>
+          <h4 style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-deep); margin-bottom:12px;">Certificates</h4>
+          <ul class="cert-list">
+            <li>Introduction to Generative AI for Data Analysis</li>
+            <li>Data Processing and Optimization with Generative AI</li>
+            <li>AI For Everyone</li>
+            <li>AI Prompting for Everyone</li>
+            <li>AP Scholar with Distinction Award</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="wrap">
+      <div class="section-head">
+        <h2>Experience</h2>
+        <span class="idx mono">04 / WORK</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-meta">
+            <div class="dates">June 2026 – Present</div>
+            <div class="loc">Ho Chi Minh City, VN</div>
+            <span class="tl-tag">Brokerage</span>
+          </div>
+          <div class="tl-body">
+            <h3>MBS Securities (MB Securities JSC)</h3>
+            <p class="tl-role">Stock Broker Intern</p>
+            <ul>
+              <li>Shadowed brokers to learn how client orders move from intake to execution, and sat in on market briefings to build a baseline in equities and trading mechanics.</li>
+              <li>Helped track daily price movements and put together simple market-summary notes for the team.</li>
+              <li>Supported the desk with light research and data entry, gaining first-hand exposure to daily brokerage operations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="leadership" class="wrap">
+      <div class="section-head">
+        <h2>Volunteer &amp; Leadership</h2>
+        <span class="idx mono">05 / COMMUNITY</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-meta">
+            <div class="dates">Jan 2025 – Present</div>
+            <div class="loc">Ho Chi Minh City, VN</div>
+            <span class="tl-tag">Nonprofit</span>
+          </div>
+          <div class="tl-body">
+            <h3>The Nest Project</h3>
+            <p class="tl-role">Founder, w/ Big Brothers Big Sisters Vietnam</p>
+            <ul>
+              <li>Generated $1,000 in funding by managing the supply chain and sales of 6,000 agricultural units — tracked via Excel — to finance donations of toiletries, school supplies, and snacks for underprivileged youth.</li>
+              <li>Led a 5-person volunteer team to launch social media campaigns reaching 440+ people, maintaining a 90% response rate across 150+ customer inquiries.</li>
+              <li>Organized the 2025 Mid-Autumn Festival for 80 children with the Academy of Civil Servants at SOS Village Go Vap.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-meta">
+            <div class="dates">Sept 2024 – May 2026</div>
+            <div class="loc">Millbrook, NY</div>
+            <span class="tl-tag">Campus Leadership</span>
+          </div>
+          <div class="tl-body">
+            <h3>DEIB Program, Millbrook School</h3>
+            <p class="tl-role">Campus Leader</p>
+            <ul>
+              <li>Completed specialized DEIB training with school faculty, then trained fellow student leaders and formulated cross-dorm outreach strategies across 4 residence halls (avg. 10 students/event).</li>
+              <li>Moderated weekly student focus groups (5 participants each) to evaluate campus events impacting peer belonging.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-meta">
+            <div class="dates">March 2024 – May 2026</div>
+            <div class="loc">Ho Chi Minh City, VN</div>
+            <span class="tl-tag">Finance</span>
+          </div>
+          <div class="tl-body">
+            <h3>Give a Little, Plan International Vietnam</h3>
+            <p class="tl-role">Finance Team Member, Paid</p>
+            <ul>
+              <li>Managed capital budgeting and revenue auditing for fundraising marketplaces, raising $2,000 to help fund clean-water and community infrastructure projects.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="wrap">
+      <div class="section-head">
+        <h2>Projects &amp; Analysis</h2>
+        <span class="idx mono">06 / BUILD</span>
+      </div>
+      <p style="margin-top:-16px; margin-bottom:28px; font-size:14.5px;">Click any project to explore the full analysis, data source, and key findings.</p>
+      <div class="proj-mini-grid">
+
+        <a class="proj-mini-card" href="#proj-lumiere">
+          <div class="proj-mini-tags">Excel · Statistics</div>
+          <h3>Lumiere Research Program — Retail Consumer Behavior</h3>
+          <p class="proj-mini-desc">Mixed-methods comparison of Whole Foods (U.S.) vs. WinMart (Vietnam) shoppers, backed by chi-square and t-tests.</p>
+          <div class="proj-mini-chip-row">
+            <span class="proj-mini-chip">Chi-square test</span>
+            <span class="proj-mini-chip">t-test</span>
+            <span class="proj-mini-chip">Survey design</span>
+          </div>
+          <div class="proj-mini-arrow">View analysis →</div>
+        </a>
+
+        <a class="proj-mini-card" href="#proj-revenue">
+          <div class="proj-mini-tags">Power BI · SQL Server</div>
+          <h3>Revenue Analysis Dashboard (KPIM)</h3>
+          <p class="proj-mini-desc">Interactive revenue dashboard tracking performance against plan, prior year, and growth targets across stores and managers.</p>
+          <div class="proj-mini-chip-row">
+            <span class="proj-mini-chip">DAX</span>
+            <span class="proj-mini-chip">KPI cards</span>
+            <span class="proj-mini-chip">Store breakdowns</span>
+          </div>
+          <div class="proj-mini-arrow">View analysis →</div>
+        </a>
+
+      </div>
+    </section>
+
+    <section id="proj-lumiere" class="detail-section wrap">
+      <a class="back-link" href="#projects">← Back to Projects</a>
+      <p class="detail-kicker">Excel · Statistics · Consumer Behavior Research</p>
+      <h2>Lumiere Research Program — Retail Consumer Behavior</h2>
+      <p class="detail-lede">Co-authored a faculty-supervised, mixed-methods research paper comparing consumer behavior at Whole Foods (U.S.) and WinMart (Vietnam), as a Student Researcher in the Lumiere Research Program (Remote, 2025).</p>
+      <div class="detail-stats">
+        <div class="detail-stat"><div class="k">Tools</div><div class="v">Excel, Google Forms</div></div>
+        <div class="detail-stat"><div class="k">Data Source</div><div class="v">Original survey, 30 shoppers (15/market)</div></div>
+        <div class="detail-stat"><div class="k">Methods</div><div class="v">Chi-square test, t-test</div></div>
+        <div class="detail-stat"><div class="k">Goal</div><div class="v">Compare shopping behavior across markets</div></div>
+      </div>
+      <div class="detail-cols">
+        <div>
+          <h4>Objectives</h4>
+          <ul>
+            <li>Compare shopping frequency and spend behavior between two retail markets</li>
+            <li>Test for statistically significant differences using chi-square and t-tests</li>
+            <li>Draw conclusions about what drives each market's shopper profile</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Key Findings</h4>
+          <ul>
+            <li>Frequency gap significant: χ² = 12.41, p &lt; .01</li>
+            <li>Spend-per-trip gap significant: t = 4.28, p &lt; .001</li>
+            <li>Whole Foods shoppers: quality-driven, high-spend. WinMart shoppers: price-sensitive, frequent.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj-revenue" class="detail-section wrap">
+      <a class="back-link" href="#projects">← Back to Projects</a>
+      <p class="detail-kicker">Power BI · SQL Server · Data Analyst</p>
+      <h2>Revenue Analysis Dashboard (KPIM)</h2>
+      <p class="detail-lede">Built an interactive Power BI revenue dashboard ("Phân Tích Doanh Thu") to help track performance against plan, prior year, and growth targets across stores, product categories, and managers.</p>
+      <div class="detail-stats">
+        <div class="detail-stat"><div class="k">Tools</div><div class="v">Power BI, DAX</div></div>
+        <div class="detail-stat"><div class="k">Data Source</div><div class="v">KPIM retail sales dataset (SQL Server)</div></div>
+        <div class="detail-stat"><div class="k">Method</div><div class="v">Data modeling, KPI &amp; trend visualization</div></div>
+        <div class="detail-stat"><div class="k">Goal</div><div class="v">At-a-glance revenue performance tracking</div></div>
+      </div>
+      <div class="detail-cols">
+        <div>
+          <h4>Objectives</h4>
+          <ul>
+            <li>Track revenue against plan, prior year, and growth % in one view</li>
+            <li>Break down performance by district, product category, and store</li>
+            <li>Surface manager-level performance for accountability</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Key Findings &amp; Features</h4>
+          <ul>
+            <li>KPI cards for revenue vs. plan, prior year, and growth %</li>
+            <li>Donut breakdowns by district and product category</li>
+            <li>100%-stacked bar chart of store performance vs. target</li>
+            <li>Month-over-month trend charts plus a manager-level performance table</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Contact</h2>
+        <span class="idx mono">07 / REACH</span>
+      </div>
+      <div class="footer-row">
+        <div>
+          <p class="proj-mini-desc" style="max-width:420px;">Open to conversations about finance, data, or anything in between — reach out any time.</p>
+        </div>
+        <div class="foot-links">
+          <a href="mailto:khangkeo99@gmail.com">khangkeo99@gmail.com</a>
+          <a href="tel:+16463480781">+1 (646) 348-0781</a>
+          <a href="https://www.linkedin.com/in/long-vu-b51b1236b/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/longvu0820-gif/projects" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <p class="foot-note">Ho Chi Minh City, Vietnam · Built for Long Vu</p>
+    </div>
+  </footer>
+
+</body>
+</html>
